@@ -1,0 +1,60 @@
+MPLINK 5.08, LINKER
+Linker Map File - Created Sat Nov 28 16:11:36 2015
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x0000be
+                   .cinit    romdata   0x00005f    program   0x000004
+.config_2007_BUILD/DEFAULT/PRODUCTION/PROJETO       code   0x002007    program   0x000002
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000060      
+                            0x002007    0x002007      
+            98 out of 8454 program addresses used, program memory utilization is 1%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+             _.org_0_0018   0x000018    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+        aguarda_conversao   0x00001f    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+          aguarda_estouro   0x000030    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+               atrasa_lcd   0x000054    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+         atrasa_limpa_lcd   0x000059    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+      escreve_comando_lcd   0x00004e    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+         escreve_dado_lcd   0x000048    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+                espera_1s   0x00002a    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+               inicia_lcd   0x00003a    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+                     init   0x00000d    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+       le_sinal_analogico   0x000019    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+             loop_leitura   0x00000e    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+           ret_atrasa_lcd   0x000056    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+     ret_atrasa_limpa_lcd   0x00005b    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                     init   0x00000d    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+             loop_leitura   0x00000e    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+             _.org_0_0018   0x000018    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+       le_sinal_analogico   0x000019    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+        aguarda_conversao   0x00001f    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+                espera_1s   0x00002a    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+          aguarda_estouro   0x000030    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+               inicia_lcd   0x00003a    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+         escreve_dado_lcd   0x000048    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+      escreve_comando_lcd   0x00004e    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+               atrasa_lcd   0x000054    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+           ret_atrasa_lcd   0x000056    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+         atrasa_limpa_lcd   0x000059    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+     ret_atrasa_limpa_lcd   0x00005b    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+
+
