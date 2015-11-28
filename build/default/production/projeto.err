@@ -1,14 +1,19 @@
-Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 29 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 32 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 35 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 38 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 53 : Found label after column 1. (REINICIA_CANCELA)
-Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 68 : Found label after column 1. (REINICIA)
-Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 71 : Found label after column 1. (ESPERA_POR_VEICULO)
-Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 72 : Found label after column 1. (EPV_LOOP)
-Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 89 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 94 : Found label after column 1. (aguarda_conversao)
-Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 104 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[305] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 130 : Using default destination of 1 (file).
-Message[305] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 164 : Using default destination of 1 (file).
-Message[305] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 177 : Using default destination of 1 (file).
+Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 30 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 33 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 36 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 39 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 54 : Found label after column 1. (REINICIA_CANCELA)
+Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 74 : Found label after column 1. (REINICIA)
+Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 77 : Found label after column 1. (ESPERA_POR_VEICULO)
+Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 78 : Found label after column 1. (EPV_LOOP)
+Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 90 : Found label after column 1. (PEGA_VALOR_DEBITO)
+Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 101 : Found label after column 1. (PULA_VALOR_4_EIXOS)
+Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 112 : Found label after column 1. (PULA_VALOR_3_EIXOS)
+Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 123 : Found label after column 1. (PULA_VALOR_CARRO)
+Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 131 : Found label after column 1. (PULA_FIM_VALOR_DEBITO)
+Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 142 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 147 : Found label after column 1. (aguarda_conversao)
+Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 157 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 182 : Using default destination of 1 (file).
+Message[305] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 216 : Using default destination of 1 (file).
+Message[305] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 229 : Using default destination of 1 (file).

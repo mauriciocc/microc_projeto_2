@@ -1,11 +1,11 @@
 MPLINK 5.08, LINKER
-Linker Map File - Created Sat Nov 28 18:02:11 2015
+Linker Map File - Created Sat Nov 28 18:40:56 2015
 
                                  Section Info
                   Section       Type    Address   Location Size(Bytes)
                 ---------  ---------  ---------  ---------  ---------
-                   .org_0       code   0x000000    program   0x0000cc
-                   .cinit    romdata   0x000066    program   0x000004
+                   .org_0       code   0x000000    program   0x0000fc
+                   .cinit    romdata   0x00007e    program   0x000004
 .config_2007_BUILD/DEFAULT/PRODUCTION/PROJETO       code   0x002007    program   0x000002
 
 
@@ -13,32 +13,37 @@ Linker Map File - Created Sat Nov 28 18:02:11 2015
                               Program Memory Usage 
                                Start         End      
                            ---------   ---------      
-                            0x000000    0x000067      
+                            0x000000    0x00007f      
                             0x002007    0x002007      
-            105 out of 8454 program addresses used, program memory utilization is 1%
+            129 out of 8454 program addresses used, program memory utilization is 1%
 
 
 
                               Symbols - Sorted by Name
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
-                 EPV_LOOP   0x000015    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-       ESPERA_POR_VEICULO   0x000015    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-                 REINICIA   0x000014    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+                 EPV_LOOP   0x000014    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+       ESPERA_POR_VEICULO   0x000014    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+        PEGA_VALOR_DEBITO   0x00001a    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+    PULA_FIM_VALOR_DEBITO   0x000033    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+       PULA_VALOR_3_EIXOS   0x000028    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+       PULA_VALOR_4_EIXOS   0x000021    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+         PULA_VALOR_CARRO   0x00002f    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+                 REINICIA   0x000013    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
          REINICIA_CANCELA   0x00000d    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-             _.org_0_001B   0x00001b    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-        aguarda_conversao   0x000022    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-          aguarda_estouro   0x000033    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-               atrasa_lcd   0x000049    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-         atrasa_limpa_lcd   0x00004e    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-      escreve_comando_lcd   0x000043    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-         escreve_dado_lcd   0x00003d    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-                espera_1s   0x00002d    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-               inicia_lcd   0x000058    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-       le_sinal_analogico   0x00001c    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-                limpa_lcd   0x000054    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-           ret_atrasa_lcd   0x00004b    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-     ret_atrasa_limpa_lcd   0x000050    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+             _.org_0_0034   0x000034    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+        aguarda_conversao   0x00003b    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+          aguarda_estouro   0x00004b    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+               atrasa_lcd   0x000061    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+         atrasa_limpa_lcd   0x000066    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+      escreve_comando_lcd   0x00005b    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+         escreve_dado_lcd   0x000055    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+         espera_w_x_500ms   0x000046    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+               inicia_lcd   0x000070    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+       le_sinal_analogico   0x000035    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+                limpa_lcd   0x00006c    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+           ret_atrasa_lcd   0x000063    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+     ret_atrasa_limpa_lcd   0x000068    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
 
 
 
@@ -46,21 +51,26 @@ Linker Map File - Created Sat Nov 28 18:02:11 2015
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
          REINICIA_CANCELA   0x00000d    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-                 REINICIA   0x000014    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-                 EPV_LOOP   0x000015    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-       ESPERA_POR_VEICULO   0x000015    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-             _.org_0_001B   0x00001b    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-       le_sinal_analogico   0x00001c    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-        aguarda_conversao   0x000022    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-                espera_1s   0x00002d    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-          aguarda_estouro   0x000033    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-         escreve_dado_lcd   0x00003d    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-      escreve_comando_lcd   0x000043    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-               atrasa_lcd   0x000049    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-           ret_atrasa_lcd   0x00004b    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-         atrasa_limpa_lcd   0x00004e    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-     ret_atrasa_limpa_lcd   0x000050    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-                limpa_lcd   0x000054    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
-               inicia_lcd   0x000058    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+                 REINICIA   0x000013    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+                 EPV_LOOP   0x000014    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+       ESPERA_POR_VEICULO   0x000014    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+        PEGA_VALOR_DEBITO   0x00001a    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+       PULA_VALOR_4_EIXOS   0x000021    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+       PULA_VALOR_3_EIXOS   0x000028    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+         PULA_VALOR_CARRO   0x00002f    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+    PULA_FIM_VALOR_DEBITO   0x000033    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+             _.org_0_0034   0x000034    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+       le_sinal_analogico   0x000035    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+        aguarda_conversao   0x00003b    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+         espera_w_x_500ms   0x000046    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+          aguarda_estouro   0x00004b    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+         escreve_dado_lcd   0x000055    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+      escreve_comando_lcd   0x00005b    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+               atrasa_lcd   0x000061    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+           ret_atrasa_lcd   0x000063    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+         atrasa_limpa_lcd   0x000066    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+     ret_atrasa_limpa_lcd   0x000068    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+                limpa_lcd   0x00006c    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
+               inicia_lcd   0x000070    program     static C:\Users\mauri\Desktop\microc_microp\PIC\projeto_final.X\projeto.asm
 
 

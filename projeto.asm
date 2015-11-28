@@ -17,7 +17,8 @@
     contador
     contador2
     contador_segundo
-    leitura_analogica
+    leitura_analogica    
+    VALOR_DEBITO
     ENDC
 
 
@@ -57,13 +58,18 @@
     ; AGUARDA ATÉ VEICULO ATIVAR O PRIMEIRO SENSOR E SALVA VALOR DA PORTA NO ACUMULADOR
     CALL ESPERA_POR_VEICULO
     
-    call espera_1s
-    call espera_1s
-    MOVLW   'A'
-    CALL escreve_dado_lcd
+    ; Aguarda alguns segundos até o "veiculo" se acomodar ^^
+    movlw 8
+    call espera_w_x_500ms
+    
+    ; PEGA VALOR DEVIDO E COLOCA NA VARIAVEL "VALOR_DEBITO"
+    CALL PEGA_VALOR_DEBITO
+    
+    
     
     goto REINICIA_CANCELA
-    
+
+;-------------------------------------------------------------------------------
     
     REINICIA
     return
@@ -78,6 +84,53 @@
 	    btfsc STATUS,Z
 	    goto EPV_LOOP
 	    		
+    return
+    
+    
+    PEGA_VALOR_DEBITO
+	
+	btfss leitura_analogica, 7
+	goto PULA_VALOR_4_EIXOS
+	    ; Caso valor esteja setado
+	    movlw .10
+	    movwf VALOR_DEBITO
+	    ; ver esquema das mensagens
+	    MOVLW   'A'
+	    CALL escreve_dado_lcd  
+	    goto PULA_FIM_VALOR_DEBITO
+	PULA_VALOR_4_EIXOS
+	
+	btfss leitura_analogica, 6
+	goto PULA_VALOR_3_EIXOS
+	    ; Caso valor esteja setado
+	    movlw 7
+	    movwf VALOR_DEBITO
+	    ; ver esquema das mensagens
+	    MOVLW   'B'
+	    CALL escreve_dado_lcd
+	    goto PULA_FIM_VALOR_DEBITO
+	PULA_VALOR_3_EIXOS
+	
+	btfss leitura_analogica, 5
+	goto PULA_VALOR_CARRO
+	    ; Caso valor esteja setado
+	    movlw 5
+	    movwf VALOR_DEBITO
+	    ; ver esquema das mensagens
+	    MOVLW   'C'
+	    CALL escreve_dado_lcd
+	    goto PULA_FIM_VALOR_DEBITO
+	PULA_VALOR_CARRO
+	
+	    movlw 0
+	    movwf VALOR_DEBITO
+	    ; ver esquema das mensagens
+	    MOVLW   'D'
+	    CALL escreve_dado_lcd
+		
+	PULA_FIM_VALOR_DEBITO
+	;CALL LCD_LIMPA_TELA
+	;CALL LCD_ENVIA_FRASE
     return
 
     GOTO $                       ;Trava programa
@@ -110,8 +163,7 @@ le_sinal_analogico
  
  
  
-espera_1s
-    movlw 2
+espera_w_x_500ms    
     movwf contador_segundo
 
     movlw 0Bh   ; Valor para 62500 contagens (500ms)
