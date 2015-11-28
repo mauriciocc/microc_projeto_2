@@ -1,4 +1,4 @@
-MPASM 5.64                       PROJETO.ASM   11-28-2015  16:11:35         PAGE  1
+MPASM 5.64                       PROJETO.ASM   11-28-2015  18:02:10         PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -32,7 +32,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00016     CBLOCK 20h                  ;Criação dos registradores (nossos) a partir da posição 20h da memória
   00000020            00017     contador
   00000021            00018     contador2
-  00000022            00019         contador_segundo
+  00000022            00019     contador_segundo
   00000023            00020     leitura_analogica
                       00021     ENDC
                       00022 
@@ -57,7 +57,7 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 0008   009F           00038     MOVWF ADCON1
                       00039 
-MPASM 5.64                       PROJETO.ASM   11-28-2015  16:11:35         PAGE  2
+MPASM 5.64                       PROJETO.ASM   11-28-2015  18:02:10         PAGE  2
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -68,151 +68,202 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00042     ; Configura timer para uso em funcao de 1s de atraso
 000A   3031           00043     movlw b'00110001' ; Timer 1 com clock interno e prescaler 8
 000B   0090           00044     movwf T1CON
-                      00045     
+                      00045       
 000C   2???           00046     CALL    inicia_lcd
                       00047     
-000D                  00048 init
-000D   1006           00049     bcf PORTB, RB0
-000E                  00050 loop_leitura
-000E   2???           00051         call le_sinal_analogico
-000F   1FA3           00052         btfss leitura_analogica, 7
-0010   2???           00053     goto init
-                      00054 
-0011   1406           00055     bsf PORTB, RB0
-0012   2???           00056     call espera_1s
-0013   1006           00057     bcf PORTB, RB0
-0014   2???           00058     call espera_1s
-                      00059 
-0015   3041           00060     MOVLW   'A'
-0016   2???           00061     CALL escreve_dado_lcd
-                      00062     
-0017   2???           00063     goto loop_leitura
+                      00048     ;FIM DA CONFIGURACAO
+                      00049     
+                      00050     
+                      00051     
+                      00052     
+Warning[207]: Found label after column 1. (REINICIA_CANCELA)
+000D                  00053     REINICIA_CANCELA
+                      00054     
+000D   2???           00055     call REINICIA
+                      00056     
+                      00057     ; AGUARDA ATÉ VEICULO ATIVAR O PRIMEIRO SENSOR E SALVA VALOR DA PORTA NO ACUMULADOR
+000E   2???           00058     CALL ESPERA_POR_VEICULO
+                      00059     
+000F   2???           00060     call espera_1s
+0010   2???           00061     call espera_1s
+0011   3041           00062     MOVLW   'A'
+0012   2???           00063     CALL escreve_dado_lcd
                       00064     
-                      00065 
-                      00066         
-                      00067 
-                      00068 
-0018   2???           00069     GOTO $                       ;Trava programa
+0013   2???           00065     goto REINICIA_CANCELA
+                      00066     
+                      00067     
+Warning[207]: Found label after column 1. (REINICIA)
+0014                  00068     REINICIA
+0014   0008           00069     return
                       00070 
-0019                  00071 le_sinal_analogico
-0019   1683           00072     BANCO1
-001A   3000           00073     MOVLW b'00000000'       ;Pinos configurados como digitais
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-001B   009F           00074     MOVWF ADCON1
-001C   1283           00075     BANCO0
-001D   300D           00076     MOVLW b'00001101'       ;Configura adcon0
-001E   009F           00077     movwf ADCON0
-                      00078 
-001F                  00079 aguarda_conversao
-001F   191F           00080         btfsc  ADCON0, 2
-0020   2???           00081     goto aguarda_conversao
+Warning[207]: Found label after column 1. (ESPERA_POR_VEICULO)
+0015                  00071     ESPERA_POR_VEICULO
+Warning[207]: Found label after column 1. (EPV_LOOP)
+0015                  00072         EPV_LOOP
+0015   2???           00073             call le_sinal_analogico     
+                      00074             
+                      00075             ; Compara valor lido = 0, fica em loop ate valor mudar
+0016   3000           00076             movlw 0
+0017   0223           00077             subwf leitura_analogica, w
+0018   1903           00078             btfsc STATUS,Z
+0019   2???           00079             goto EPV_LOOP
+                      00080                         
+001A   0008           00081     return
                       00082 
-0021   081E           00083     movfw ADRESH
-0022   00A3           00084     movwf leitura_analogica
+001B   2???           00083     GOTO $                       ;Trava programa
+                      00084 
                       00085     
-                      00086     ;Restaura valor (conflito LCD)
-0023   1683           00087     BANCO1
-0024   300E           00088     MOVLW b'00001110'       ;Pinos configurados como digitais
+001C                  00086 le_sinal_analogico
+001C   1683           00087     BANCO1
+001D   3000           00088         MOVLW b'00000000'       ;Pinos configurados como digitais
+MPASM 5.64                       PROJETO.ASM   11-28-2015  18:02:10         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0025   009F           00089     MOVWF ADCON1
-0026   1283           00090     BANCO0
-MPASM 5.64                       PROJETO.ASM   11-28-2015  16:11:35         PAGE  3
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-0027   3000           00091     MOVLW b'00000000'
-0028   009F           00092     movwf ADCON0
-0029   0008           00093  return
-                      00094     
-002A                  00095 espera_1s
-002A   3002           00096     movlw 2
-002B   00A2           00097     movwf contador_segundo
-                      00098 
-002C   300B           00099     movlw 0Bh   ; Valor para 62500 contagens (500ms)
-002D   008E           00100     movwf TMR1L ; 2^16 - 62500
-002E   30DC           00101     movlw 0DCh
-002F   008F           00102     movwf TMR1H
-                      00103 
-0030                  00104 aguarda_estouro
-0030   1C0C           00105        btfss PIR1, TMR1IF ; Espera timer0 estourar
-0031   2???           00106        goto aguarda_estouro
-0032   300B           00107        movlw 0Bh   ; Valor para 62500 contagens (500ms)
-0033   008E           00108        movwf TMR1L ; 2^16 - 62500
-0034   30DC           00109        movlw 0DCh
-0035   008F           00110        movwf TMR1H
-0036   100C           00111        bcf PIR1, TMR1IF ; Limpa flag de estouro
+001E   009F           00089         MOVWF ADCON1
+001F   1283           00090     BANCO0
+0020   300D           00091     MOVLW b'00001101'       ;Configura adcon0
+0021   009F           00092     movwf ADCON0
+                      00093  
+Warning[207]: Found label after column 1. (aguarda_conversao)
+0022                  00094     aguarda_conversao
+0022   191F           00095         btfsc  ADCON0, 2
+0023   2???           00096     goto aguarda_conversao
+                      00097 
+0024   081E           00098     movfw ADRESH
+0025   00A3           00099     movwf leitura_analogica
+                      00100     
+                      00101     ;Restaura valor (conflito LCD)
+0026   1683           00102     BANCO1
+0027   300E           00103         MOVLW b'00001110'       ;Pinos configurados como digitais
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0028   009F           00104         MOVWF ADCON1
+0029   1283           00105     BANCO0
+002A   3000           00106     MOVLW b'00000000'
+002B   009F           00107     movwf ADCON0
+002C   0008           00108  return
+                      00109     
+                      00110  
+                      00111  
+                      00112  
+002D                  00113 espera_1s
+002D   3002           00114     movlw 2
+002E   00A2           00115     movwf contador_segundo
+                      00116 
+002F   300B           00117     movlw 0Bh   ; Valor para 62500 contagens (500ms)
+0030   008E           00118     movwf TMR1L ; 2^16 - 62500
+0031   30DC           00119     movlw 0DCh
+0032   008F           00120     movwf TMR1H
+                      00121 
+0033                  00122 aguarda_estouro
+0033   1C0C           00123        btfss PIR1, TMR1IF ; Espera timer0 estourar
+0034   2???           00124        goto aguarda_estouro
+0035   300B           00125        movlw 0Bh   ; Valor para 62500 contagens (500ms)
+0036   008E           00126        movwf TMR1L ; 2^16 - 62500
+0037   30DC           00127        movlw 0DCh
+0038   008F           00128        movwf TMR1H
+0039   100C           00129        bcf PIR1, TMR1IF ; Limpa flag de estouro
 Message[305]: Using default destination of 1 (file).
-0037   0BA2           00112        decfsz contador_segundo ; Aguarda 20 ocorrencias
-0038   2???           00113        goto aguarda_estouro
-0039   0008           00114  return
-                      00115     
-003A                  00116 inicia_lcd
-003A   3038           00117     MOVLW   38h
-003B   2???           00118     CALL escreve_comando_lcd
-                      00119 
-003C   3038           00120     MOVLW   38h
-003D   2???           00121     CALL escreve_comando_lcd
-                      00122 
-003E   3038           00123     MOVLW   38h
-003F   2???           00124     CALL escreve_comando_lcd
-                      00125 
-0040   3006           00126     MOVLW   06h
-0041   2???           00127     CALL escreve_comando_lcd
-                      00128 
-0042   300C           00129     MOVLW   0Ch
-0043   2???           00130     CALL escreve_comando_lcd
-                      00131 
-0044   3001           00132     MOVLW   01h
-0045   2???           00133     CALL escreve_comando_lcd
-0046   2???           00134     CALL atrasa_limpa_lcd
-                      00135 
-0047   0008           00136     RETURN
-                      00137 
-0048                  00138 escreve_dado_lcd
-0048   1409           00139     BSF     PORTE, RE0          ;Define dado no LCD (RS=1)
-0049   0088           00140     MOVWF   PORTD
-004A   1489           00141     BSF     PORTE, RE1          ;Ativa ENABLE do LCD
-004B   1089           00142     BCF     PORTE, RE1          ;Destativa ENABLE do LCD
-MPASM 5.64                       PROJETO.ASM   11-28-2015  16:11:35         PAGE  4
+003A   0BA2           00130        decfsz contador_segundo ; Aguarda 20 ocorrencias
+003B   2???           00131        goto aguarda_estouro
+003C   0008           00132  return
+                      00133     
+                      00134  
+                      00135  
+                      00136  
+                      00137  
+MPASM 5.64                       PROJETO.ASM   11-28-2015  18:02:10         PAGE  4
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-004C   2???           00143     CALL    atrasa_lcd
-004D   0008           00144     RETURN
+003D                  00138 escreve_dado_lcd
+003D   1409           00139     BSF     PORTE, RE0          ;Define dado no LCD (RS=1)
+003E   0088           00140     MOVWF   PORTD
+003F   1489           00141     BSF     PORTE, RE1          ;Ativa ENABLE do LCD
+0040   1089           00142     BCF     PORTE, RE1          ;Destativa ENABLE do LCD
+0041   2???           00143     CALL    atrasa_lcd
+0042   0008           00144     RETURN
                       00145 
-004E                  00146 escreve_comando_lcd
-004E   1009           00147     BCF     PORTE, RE0          ;Define dado no LCD (RS=0)
-004F   0088           00148     MOVWF   PORTD
-0050   1489           00149     BSF     PORTE, RE1          ;Ativa ENABLE do LCD
-0051   1089           00150     BCF     PORTE, RE1          ;Destativa ENABLE do LCD
-0052   2???           00151     CALL    atrasa_lcd
-0053   0008           00152     RETURN
-                      00153 
-0054                  00154 atrasa_lcd
-0054   3026           00155     MOVLW 26                     ; 8 clocks ( pipe-line nova)
-0055   00A0           00156     MOVWF contador               ; 4 clocks
-0056                  00157 ret_atrasa_lcd
+                      00146     
+                      00147     
+                      00148     
+0043                  00149 escreve_comando_lcd
+0043   1009           00150     BCF     PORTE, RE0          ;Define dado no LCD (RS=0)
+0044   0088           00151     MOVWF   PORTD
+0045   1489           00152     BSF     PORTE, RE1          ;Ativa ENABLE do LCD
+0046   1089           00153     BCF     PORTE, RE1          ;Destativa ENABLE do LCD
+0047   2???           00154     CALL    atrasa_lcd
+0048   0008           00155     RETURN
+                      00156 
+                      00157     
+                      00158     
+                      00159     
+0049                  00160 atrasa_lcd
+0049   3026           00161     MOVLW 26                     ; 8 clocks ( pipe-line nova)
+004A   00A0           00162     MOVWF contador               ; 4 clocks
+004B                  00163 ret_atrasa_lcd
 Message[305]: Using default destination of 1 (file).
-0056   0BA0           00158     DECFSZ contador              ; 8 clocks (pipe-line nova)
-0057   2???           00159     GOTO ret_atrasa_lcd          ; 4 clocks
-0058   0008           00160     RETURN
-                      00161 
-                      00162 
-0059                  00163 atrasa_limpa_lcd
-0059   3040           00164     MOVLW 40
-005A   00A1           00165     MOVWF contador2
-005B                  00166 ret_atrasa_limpa_lcd
-005B   2???           00167     CALL atrasa_lcd
+004B   0BA0           00164     DECFSZ contador              ; 8 clocks (pipe-line nova)
+004C   2???           00165     GOTO ret_atrasa_lcd          ; 4 clocks
+004D   0008           00166     RETURN
+                      00167 
+                      00168 
+                      00169     
+                      00170     
+                      00171     
+004E                  00172 atrasa_limpa_lcd
+004E   3040           00173     MOVLW 40
+004F   00A1           00174     MOVWF contador2
+0050                  00175 ret_atrasa_limpa_lcd
+0050   2???           00176     CALL atrasa_lcd
 Message[305]: Using default destination of 1 (file).
-005C   0BA1           00168     DECFSZ contador2
-005D   2???           00169     GOTO ret_atrasa_limpa_lcd
-005E   0008           00170     RETURN
-3FBA                  00171     END
-MPASM 5.64                       PROJETO.ASM   11-28-2015  16:11:35         PAGE  5
+0051   0BA1           00177     DECFSZ contador2
+0052   2???           00178     GOTO ret_atrasa_limpa_lcd
+0053   0008           00179     RETURN
+                      00180     
+                      00181     
+0054                  00182 limpa_lcd
+0054   3001           00183     MOVLW   01h
+0055   2???           00184     CALL escreve_comando_lcd
+0056   2???           00185     CALL atrasa_limpa_lcd
+0057   0008           00186     return
+                      00187     
+                      00188     
+MPASM 5.64                       PROJETO.ASM   11-28-2015  18:02:10         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0058                  00189 inicia_lcd
+0058   3038           00190     MOVLW   38h
+0059   2???           00191     CALL escreve_comando_lcd
+                      00192 
+005A   3038           00193     MOVLW   38h
+005B   2???           00194     CALL escreve_comando_lcd
+                      00195 
+005C   3038           00196     MOVLW   38h
+005D   2???           00197     CALL escreve_comando_lcd
+                      00198 
+005E   3006           00199     MOVLW   06h
+005F   2???           00200     CALL escreve_comando_lcd
+                      00201 
+0060   300C           00202     MOVLW   0Ch
+0061   2???           00203     CALL escreve_comando_lcd
+                      00204 
+0062   3001           00205     MOVLW   01h
+0063   2???           00206     CALL escreve_comando_lcd
+0064   2???           00207     CALL atrasa_limpa_lcd
+                      00208 
+0065   0008           00209     RETURN
+                      00210     
+3FBA                  00211  END
+MPASM 5.64                       PROJETO.ASM   11-28-2015  18:02:10         PAGE  6
 
 
 SYMBOL TABLE
@@ -271,7 +322,7 @@ CCPR2L                            0000001B
 CHS0                              00000003
 CHS1                              00000004
 CHS2                              00000005
-MPASM 5.64                       PROJETO.ASM   11-28-2015  16:11:35         PAGE  6
+MPASM 5.64                       PROJETO.ASM   11-28-2015  18:02:10         PAGE  7
 
 
 SYMBOL TABLE
@@ -310,6 +361,8 @@ EEDATH                            0000010E
 EEIE                              00000004
 EEIF                              00000004
 EEPGD                             00000007
+EPV_LOOP                          00000015
+ESPERA_POR_VEICULO                00000015
 F                                 00000001
 FERR                              00000002
 FSR                               00000004
@@ -328,14 +381,14 @@ INDF                              00000000
 INTCON                            0000000B
 INTE                              00000004
 INTEDG                            00000006
-INTF                              00000001
-IRP                               00000007
-MPASM 5.64                       PROJETO.ASM   11-28-2015  16:11:35         PAGE  7
+MPASM 5.64                       PROJETO.ASM   11-28-2015  18:02:10         PAGE  8
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+INTF                              00000001
+IRP                               00000007
 NOT_A                             00000005
 NOT_ADDRESS                       00000005
 NOT_BO                            00000000
@@ -387,14 +440,14 @@ RA2                               00000002
 RA3                               00000003
 RA4                               00000004
 RA5                               00000005
-RB0                               00000000
-RB1                               00000001
-MPASM 5.64                       PROJETO.ASM   11-28-2015  16:11:35         PAGE  8
+MPASM 5.64                       PROJETO.ASM   11-28-2015  18:02:10         PAGE  9
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+RB0                               00000000
+RB1                               00000001
 RB2                               00000002
 RB3                               00000003
 RB4                               00000004
@@ -432,6 +485,8 @@ RE0                               00000000
 RE1                               00000001
 RE2                               00000002
 READ_WRITE                        00000002
+REINICIA                          00000014
+REINICIA_CANCELA                  0000000D
 RP0                               00000005
 RP1                               00000006
 RSEN                              00000001
@@ -444,16 +499,16 @@ SEN                               00000000
 SMP                               00000007
 SPBRG                             00000099
 SPEN                              00000007
-SREN                              00000005
-SSPADD                            00000093
-SSPBUF                            00000013
-SSPCON                            00000014
-MPASM 5.64                       PROJETO.ASM   11-28-2015  16:11:35         PAGE  9
+MPASM 5.64                       PROJETO.ASM   11-28-2015  18:02:10         PAGE 10
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+SREN                              00000005
+SSPADD                            00000093
+SSPBUF                            00000013
+SSPCON                            00000014
 SSPCON2                           00000091
 SSPEN                             00000005
 SSPIE                             00000003
@@ -503,16 +558,16 @@ TRISA1                            00000001
 TRISA2                            00000002
 TRISA3                            00000003
 TRISA4                            00000004
-TRISA5                            00000005
-TRISB                             00000086
-TRISB0                            00000000
-TRISB1                            00000001
-MPASM 5.64                       PROJETO.ASM   11-28-2015  16:11:35         PAGE 10
+MPASM 5.64                       PROJETO.ASM   11-28-2015  18:02:10         PAGE 11
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+TRISA5                            00000005
+TRISB                             00000086
+TRISB0                            00000000
+TRISB1                            00000001
 TRISB2                            00000002
 TRISB3                            00000003
 TRISB4                            00000004
@@ -558,20 +613,20 @@ WR                                00000001
 WREN                              00000002
 WRERR                             00000003
 Z                                 00000002
-_.org_0_0018                      00000018
+_.org_0_001B                      0000001B
 _BODEN_OFF                        00003FBF
 _BODEN_ON                         00003FFF
 _BOREN_OFF                        00003FBF
-_BOREN_ON                         00003FFF
-_CONFIG                           00002007
-_CPD_OFF                          00003FFF
-_CPD_ON                           00003EFF
-MPASM 5.64                       PROJETO.ASM   11-28-2015  16:11:35         PAGE 11
+MPASM 5.64                       PROJETO.ASM   11-28-2015  18:02:10         PAGE 12
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+_BOREN_ON                         00003FFF
+_CONFIG                           00002007
+_CPD_OFF                          00003FFF
+_CPD_ON                           00003EFF
 _CP_ALL                           00001FFF
 _CP_OFF                           00003FFF
 _CP_ON                            00001FFF
@@ -603,26 +658,31 @@ _WRT_HALF                         000039FF
 _WRT_OFF                          00003FFF
 _XT_OSC                           00003FFD
 __16F877A                         00000001
-aguarda_conversao                 0000001F
-aguarda_estouro                   00000030
-atrasa_lcd                        00000054
-atrasa_limpa_lcd                  00000059
+aguarda_conversao                 00000022
+aguarda_estouro                   00000033
+atrasa_lcd                        00000049
+atrasa_limpa_lcd                  0000004E
 contador                          00000020
 contador2                         00000021
 contador_segundo                  00000022
-escreve_comando_lcd               0000004E
-escreve_dado_lcd                  00000048
-espera_1s                         0000002A
-inicia_lcd                        0000003A
-init                              0000000D
-le_sinal_analogico                00000019
+escreve_comando_lcd               00000043
+escreve_dado_lcd                  0000003D
+espera_1s                         0000002D
+inicia_lcd                        00000058
+le_sinal_analogico                0000001C
 leitura_analogica                 00000023
-loop_leitura                      0000000E
-ret_atrasa_lcd                    00000056
-ret_atrasa_limpa_lcd              0000005B
+limpa_lcd                         00000054
+ret_atrasa_lcd                    0000004B
+ret_atrasa_limpa_lcd              00000050
+
+MPASM 5.64                       PROJETO.ASM   11-28-2015  18:02:10         PAGE 13
+
+
+
+
 
 Errors   :     0
-Warnings :     0 reported,     0 suppressed
+Warnings :     5 reported,     0 suppressed
 Messages :     9 reported,     0 suppressed
 
 

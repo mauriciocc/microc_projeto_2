@@ -2,8 +2,13 @@ Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.AS
 Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 32 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 35 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 38 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 74 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 53 : Found label after column 1. (REINICIA_CANCELA)
+Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 68 : Found label after column 1. (REINICIA)
+Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 71 : Found label after column 1. (ESPERA_POR_VEICULO)
+Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 72 : Found label after column 1. (EPV_LOOP)
 Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 89 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[305] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 112 : Using default destination of 1 (file).
-Message[305] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 158 : Using default destination of 1 (file).
-Message[305] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 168 : Using default destination of 1 (file).
+Warning[207] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 94 : Found label after column 1. (aguarda_conversao)
+Message[302] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 104 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 130 : Using default destination of 1 (file).
+Message[305] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 164 : Using default destination of 1 (file).
+Message[305] C:\USERS\MAURI\DESKTOP\MICROC_MICROP\PIC\PROJETO_FINAL.X\PROJETO.ASM 177 : Using default destination of 1 (file).

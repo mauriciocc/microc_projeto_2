@@ -16,7 +16,7 @@
     CBLOCK 20h                  ;Criação dos registradores (nossos) a partir da posição 20h da memória
     contador
     contador2
-        contador_segundo
+    contador_segundo
     leitura_analogica
     ENDC
 
@@ -42,41 +42,56 @@
     ; Configura timer para uso em funcao de 1s de atraso
     movlw b'00110001' ; Timer 1 com clock interno e prescaler 8
     movwf T1CON
-    
+      
     CALL    inicia_lcd
     
-init
-    bcf PORTB, RB0
-loop_leitura
-	call le_sinal_analogico
-	btfss leitura_analogica, 7
-    goto init
-
-    bsf PORTB, RB0
+    ;FIM DA CONFIGURACAO
+    
+    
+    
+    
+    REINICIA_CANCELA
+    
+    call REINICIA
+    
+    ; AGUARDA ATÉ VEICULO ATIVAR O PRIMEIRO SENSOR E SALVA VALOR DA PORTA NO ACUMULADOR
+    CALL ESPERA_POR_VEICULO
+    
     call espera_1s
-    bcf PORTB, RB0
     call espera_1s
-
     MOVLW   'A'
     CALL escreve_dado_lcd
     
-    goto loop_leitura
+    goto REINICIA_CANCELA
     
+    
+    REINICIA
+    return
 
-        
-
+    ESPERA_POR_VEICULO
+    	EPV_LOOP
+	    call le_sinal_analogico	
+	    
+	    ; Compara valor lido = 0, fica em loop ate valor mudar
+	    movlw 0
+	    subwf leitura_analogica, w
+	    btfsc STATUS,Z
+	    goto EPV_LOOP
+	    		
+    return
 
     GOTO $                       ;Trava programa
 
+    
 le_sinal_analogico
     BANCO1
-    MOVLW b'00000000'       ;Pinos configurados como digitais
-    MOVWF ADCON1
+	MOVLW b'00000000'       ;Pinos configurados como digitais
+	MOVWF ADCON1
     BANCO0
     MOVLW b'00001101'       ;Configura adcon0
     movwf ADCON0
-
-aguarda_conversao
+ 
+    aguarda_conversao
         btfsc  ADCON0, 2
     goto aguarda_conversao
 
@@ -85,13 +100,16 @@ aguarda_conversao
     
     ;Restaura valor (conflito LCD)
     BANCO1
-    MOVLW b'00001110'       ;Pinos configurados como digitais
-    MOVWF ADCON1
+	MOVLW b'00001110'       ;Pinos configurados como digitais
+	MOVWF ADCON1
     BANCO0
     MOVLW b'00000000'
     movwf ADCON0
  return
     
+ 
+ 
+ 
 espera_1s
     movlw 2
     movwf contador_segundo
@@ -112,6 +130,61 @@ aguarda_estouro
        decfsz contador_segundo ; Aguarda 20 ocorrencias
        goto aguarda_estouro
  return
+    
+ 
+ 
+ 
+ 
+escreve_dado_lcd
+    BSF     PORTE, RE0          ;Define dado no LCD (RS=1)
+    MOVWF   PORTD
+    BSF     PORTE, RE1          ;Ativa ENABLE do LCD
+    BCF     PORTE, RE1          ;Destativa ENABLE do LCD
+    CALL    atrasa_lcd
+    RETURN
+
+    
+    
+    
+escreve_comando_lcd
+    BCF     PORTE, RE0          ;Define dado no LCD (RS=0)
+    MOVWF   PORTD
+    BSF     PORTE, RE1          ;Ativa ENABLE do LCD
+    BCF     PORTE, RE1          ;Destativa ENABLE do LCD
+    CALL    atrasa_lcd
+    RETURN
+
+    
+    
+    
+atrasa_lcd
+    MOVLW 26                     ; 8 clocks ( pipe-line nova)
+    MOVWF contador               ; 4 clocks
+ret_atrasa_lcd
+    DECFSZ contador              ; 8 clocks (pipe-line nova)
+    GOTO ret_atrasa_lcd          ; 4 clocks
+    RETURN
+
+
+    
+    
+    
+atrasa_limpa_lcd
+    MOVLW 40
+    MOVWF contador2
+ret_atrasa_limpa_lcd
+    CALL atrasa_lcd
+    DECFSZ contador2
+    GOTO ret_atrasa_limpa_lcd
+    RETURN
+    
+    
+limpa_lcd
+    MOVLW   01h
+    CALL escreve_comando_lcd
+    CALL atrasa_limpa_lcd
+    return
+    
     
 inicia_lcd
     MOVLW   38h
@@ -134,38 +207,24 @@ inicia_lcd
     CALL atrasa_limpa_lcd
 
     RETURN
-
-escreve_dado_lcd
-    BSF     PORTE, RE0          ;Define dado no LCD (RS=1)
-    MOVWF   PORTD
-    BSF     PORTE, RE1          ;Ativa ENABLE do LCD
-    BCF     PORTE, RE1          ;Destativa ENABLE do LCD
-    CALL    atrasa_lcd
-    RETURN
-
-escreve_comando_lcd
-    BCF     PORTE, RE0          ;Define dado no LCD (RS=0)
-    MOVWF   PORTD
-    BSF     PORTE, RE1          ;Ativa ENABLE do LCD
-    BCF     PORTE, RE1          ;Destativa ENABLE do LCD
-    CALL    atrasa_lcd
-    RETURN
-
-atrasa_lcd
-    MOVLW 26                     ; 8 clocks ( pipe-line nova)
-    MOVWF contador               ; 4 clocks
-ret_atrasa_lcd
-    DECFSZ contador              ; 8 clocks (pipe-line nova)
-    GOTO ret_atrasa_lcd          ; 4 clocks
-    RETURN
-
-
-atrasa_limpa_lcd
-    MOVLW 40
-    MOVWF contador2
-ret_atrasa_limpa_lcd
-    CALL atrasa_lcd
-    DECFSZ contador2
-    GOTO ret_atrasa_limpa_lcd
-    RETURN
-    END
+    
+ END
+    
+    
+    ; PROGRAMA TESTE
+    ;init
+;    bcf PORTB, RB0
+;loop_leitura
+;	call le_sinal_analogico
+;	btfss leitura_analogica, 7
+;    goto init
+;
+;    bsf PORTB, RB0
+;    call espera_1s
+;    bcf PORTB, RB0
+;    call espera_1s
+;
+;    MOVLW   'A'
+;    CALL escreve_dado_lcd
+;    
+;    goto loop_leitura
