@@ -18,7 +18,10 @@
     contador2
     contador_segundo
     leitura_analogica    
-    VALOR_DEBITO
+    tmp_var
+    VALOR_DEBITO    
+    TEMPO_LUZ_ALERTA
+    TEMPO_SOM_ALERTA
     ENDC
 
 
@@ -29,10 +32,14 @@
     movlw b'11111110' ;  Habilita saida no pino RB0
     movwf TRISB
     
-    MOVLW 0
+    movlw b'11100111' ;  Habilita saida no pino RC3 e RC4
+    movwf TRISC
+    
+    ;MOVLW b'00000011'
+    movlw 0
     MOVWF TRISD             ;PORTA D É SAÍDA
 
-    MOVLW b'11101100'       ;Quarto bit é configurado como 0 para não estragar a porta D (I/O)
+    MOVLW b'11101000'       ;Quarto bit é configurado como 0 para não estragar a porta D (I/O)
     MOVWF TRISE             ;Bits 0 e 1 da porta E são saídas
     
     MOVLW b'00001110'       ;Pinos configurados como digitais
@@ -53,20 +60,44 @@
     
     REINICIA_CANCELA
     
-    call REINICIA
-    
-    ; AGUARDA ATÉ VEICULO ATIVAR O PRIMEIRO SENSOR E SALVA VALOR DA PORTA NO ACUMULADOR
-    CALL ESPERA_POR_VEICULO
-    
-    ; Aguarda alguns segundos até o "veiculo" se acomodar ^^
-    movlw 8
-    call espera_w_x_500ms
-    
-    ; PEGA VALOR DEVIDO E COLOCA NA VARIAVEL "VALOR_DEBITO"
-    CALL PEGA_VALOR_DEBITO
-    
-    
-    
+	call REINICIA
+
+	; AGUARDA ATÉ VEICULO ATIVAR O PRIMEIRO SENSOR E SALVA VALOR DA PORTA NO ACUMULADOR
+	CALL ESPERA_POR_VEICULO
+
+	; Aguarda alguns segundos até o "veiculo" se acomodar ^^
+	movlw 8
+	call espera_w_x_500ms
+	
+	; Lê novamente o sinal analogico (apos o sinal estabilizar, pois serao colocados pesos)
+	call le_sinal_analogico
+	
+	; PEGA VALOR DEVIDO E COLOCA NA VARIAVEL "VALOR_DEBITO"
+	CALL PEGA_VALOR_DEBITO
+	
+	; AGUARDA PELO PAGAMENTO DO DEBITO
+	CALL AGUARDA_PAGAMENTO
+	
+	
+	movlw 4
+	call espera_w_x_500ms
+	
+	; Abre cancela	    
+	bsf PORTE, RE2
+	; Fim
+	
+	aguarda_passagem_carro
+	    call le_sinal_analogico
+	    ; fica em loop ate valor voltar para 0
+	    movlw 0
+	    subwf leitura_analogica, 1
+	    btfss STATUS,Z
+	goto aguarda_passagem_carro
+	
+	; Aguarda 4s
+	movlw 8
+	call espera_w_x_500ms
+	    
     goto REINICIA_CANCELA
 
 ;-------------------------------------------------------------------------------
@@ -80,7 +111,7 @@
 	    
 	    ; Compara valor lido = 0, fica em loop ate valor mudar
 	    movlw 0
-	    subwf leitura_analogica, w
+	    subwf leitura_analogica, 1
 	    btfsc STATUS,Z
 	    goto EPV_LOOP
 	    		
@@ -132,7 +163,147 @@
 	;CALL LCD_LIMPA_TELA
 	;CALL LCD_ENVIA_FRASE
     return
+    
+    RESETA_ALERTAS
+	movlw .30
+	movwf TEMPO_LUZ_ALERTA
+	movlw .20
+	movwf TEMPO_SOM_ALERTA
+	bcf PORTB, RB0	
+	; ??? aonde esta ligado o som de alerta ???
+    RET
+    
+    ;------------------------------------------------------
+    ; AGUARDA PAGAMENTO DO DEBITO
+    AGUARDA_PAGAMENTO
+    
+	    ; SE VALOR_DEBITO FOR 0 RETORNA IMEDIATAMENTE
+	    movlw 0
+	    subwf VALOR_DEBITO, 1
+	    btfsc STATUS,Z
+	    return
+	    
+	    ; Habilita RN (Recebimento de notas) - Isso é utilizado ?
+	    ;SETB P1.6
+	    
+	    CALL RESETA_ALERTAS
+	    AP_LOOP
+		
+		; 1s entre as operações
+		movlw 2
+		call espera_w_x_500ms
+		
+		; AQUI PRECISA ENVIAR MENSAGEM
+		
+		
+		; Limpa flags
+		bcf STATUS, C
+		bcf STATUS, Z
+		
+		;Habilita leitura nos pinos necessarios da porta d
+		BANCO1
+		    movlw b'00000011'
+		    MOVWF TRISD
+		BANCO0
+		
+		; Checa input de nota de R$ 2
+		btfss PORTD, RD0
+		goto AP_PULA_NOTA_2
 
+		    movlw 2
+		    subwf VALOR_DEBITO, 1
+
+		    call RESETA_ALERTAS
+		    
+		    goto AP_FORA_NOTA
+		
+		AP_PULA_NOTA_2
+		
+		; Checa input de nota de R$ 5
+		btfss PORTD, RD1
+		goto AP_PULA_NOTA_5
+
+		    movlw 5
+		    subwf VALOR_DEBITO, 1
+
+		    call RESETA_ALERTAS
+		    
+		    goto AP_FORA_NOTA
+		
+		AP_PULA_NOTA_5
+		
+		AP_FORA_NOTA
+		
+		; Retorna porta D para o estado padrao
+		BANCO1
+		    movlw 0
+		    MOVWF TRISD
+		BANCO0
+		
+		; ORDEM DAS INSTRUÇÕES É IMPORTANTE
+		; NUMERO NEGATIVO seta tanto o C como o Z
+		
+		; Caso resultado o resultado de negativo, precisamos dar
+		; troco para o motorista
+		btfsc STATUS,C
+		goto AP_TROCO
+		
+		; Caso resultado da subtração seja 0, retorna normalmente
+		btfsc STATUS,Z
+		return
+		
+
+	    
+	    goto AP_LOOP
+	    			    
+	    AP_TROCO
+	    
+	    ;CONVERTE PARA VALOR ABSOLUTO
+	    movfw VALOR_DEBITO
+	    movwf tmp_var
+	    movlw .255
+	    
+	    movwf VALOR_DEBITO
+	    movfw tmp_var
+	    subwf VALOR_DEBITO, 1
+	    incf VALOR_DEBITO, 1
+	    ; FIM 
+	    
+	    APT_LOOP
+	    
+	    ; REPOEM MOEDA
+		bsf PORTC, RC3	   
+		movlw 2
+		call espera_w_x_500ms
+
+		; FECHA SM
+		bcf PORTC, RC3	   
+		movlw 2
+		call espera_w_x_500ms	    
+	    ; FIM
+	    
+	    ; LIBERA MOEDA
+		bsf PORTC, RC4	   
+		movlw 2
+		call espera_w_x_500ms
+
+		; FECHA SM
+		bcf PORTC, RC4	   
+		movlw 2
+		call espera_w_x_500ms	    
+	    ; FIM
+	    
+	    
+	    movlw 1
+	    subwf VALOR_DEBITO, 1
+	    
+	    ; Checa se o troco ja foi dado (VALOR_DEBITO = 0)	    
+	    btfss STATUS,Z
+	    goto APT_LOOP
+	    
+	    
+    return
+	
     GOTO $                       ;Trava programa
 
     
