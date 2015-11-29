@@ -28,8 +28,9 @@
     ORG 0
 
     BANCO1
-
-    movlw b'11111110' ;  Habilita saida no pino RB0
+    
+    ; Habilitado R1 para output para simular BUZZER
+    movlw b'11111100' ;  Habilita saida no pino RB0
     movwf TRISB
     
     movlw b'11100111' ;  Habilita saida no pino RC3 e RC4
@@ -74,6 +75,8 @@
 	
 	; PEGA VALOR DEVIDO E COLOCA NA VARIAVEL "VALOR_DEBITO"
 	CALL PEGA_VALOR_DEBITO
+	;movlw .0
+	;movwf VALOR_DEBITO
 	
 	; AGUARDA PELO PAGAMENTO DO DEBITO
 	CALL AGUARDA_PAGAMENTO
@@ -87,12 +90,28 @@
 	; Fim
 	
 	aguarda_passagem_carro
+	    movlw 2
+	    call espera_w_x_500ms
+	    
+	    ; DEBUG
+	    MOVLW   'Z'
+	    CALL escreve_dado_lcd
+	    
 	    call le_sinal_analogico
 	    ; fica em loop ate valor voltar para 0
 	    movlw 0
 	    subwf leitura_analogica, 1
 	    btfss STATUS,Z
-	goto aguarda_passagem_carro
+	    goto APC_INC_ALERTAS
+	    goto APC_PULA
+	
+	    APC_INC_ALERTAS
+	    call ALERTAS_STEP
+	    goto aguarda_passagem_carro
+	
+	APC_PULA
+	
+	call RESETA_ALERTAS
 	
 	; Aguarda 4s
 	movlw 8
@@ -103,6 +122,7 @@
 ;-------------------------------------------------------------------------------
     
     REINICIA
+	call RESETA_ALERTAS
     return
 
     ESPERA_POR_VEICULO
@@ -126,7 +146,7 @@
 	    movlw .10
 	    movwf VALOR_DEBITO
 	    ; ver esquema das mensagens
-	    MOVLW   'A'
+	    MOVLW   '4'
 	    CALL escreve_dado_lcd  
 	    goto PULA_FIM_VALOR_DEBITO
 	PULA_VALOR_4_EIXOS
@@ -137,7 +157,7 @@
 	    movlw 7
 	    movwf VALOR_DEBITO
 	    ; ver esquema das mensagens
-	    MOVLW   'B'
+	    MOVLW   '3'
 	    CALL escreve_dado_lcd
 	    goto PULA_FIM_VALOR_DEBITO
 	PULA_VALOR_3_EIXOS
@@ -156,7 +176,7 @@
 	    movlw 0
 	    movwf VALOR_DEBITO
 	    ; ver esquema das mensagens
-	    MOVLW   'D'
+	    MOVLW   'M'
 	    CALL escreve_dado_lcd
 		
 	PULA_FIM_VALOR_DEBITO
@@ -171,7 +191,49 @@
 	movwf TEMPO_SOM_ALERTA
 	bcf PORTB, RB0	
 	; ??? aonde esta ligado o som de alerta ???
-    RET
+	bcf PORTB, RB1
+    return
+    
+    ALERTAS_STEP
+    
+	; Checa se TEMPO_LUZ_ALERTA = 0
+	movlw 0
+	subwf TEMPO_LUZ_ALERTA, 1
+	
+	btfsc STATUS,Z
+	goto TOGGLE_LUZ_ALERTA ; Se for "toggleia" luz
+	
+	DECF TEMPO_LUZ_ALERTA ; Senão decrementa variavel retorna (som só liga 20s apos luz ligar)
+	return
+
+	TOGGLE_LUZ_ALERTA
+	    btfsc PORTB, RB0
+	    goto DESLIGA_LUZ_ALERTA ; Caso luz esteja liga, pula para desligar luz
+	    
+	    bsf PORTB, RB0 ; Liga luz
+	    goto PULA_LUZ_ALERTA
+	    
+	    DESLIGA_LUZ_ALERTA
+	    bcf PORTB, RB0 ; Liga luz
+	
+	PULA_LUZ_ALERTA
+	
+	; Checa se TEMPO_SOM_ALERTA = 0
+	movlw 0
+	subwf TEMPO_SOM_ALERTA, 1
+	
+	btfsc STATUS,Z
+	goto TOGGLE_SOM_ALERTA ; Se for "toggleia" som
+	
+	DECF TEMPO_SOM_ALERTA ; Senão decrementa variavel e pula
+	goto PULA_SOM_ALERTA
+
+	TOGGLE_SOM_ALERTA
+	    btfss PORTB, RB1
+	    bsf PORTB, RB1 ; Liga som :D    
+	PULA_SOM_ALERTA
+	
+    return 
     
     ;------------------------------------------------------
     ; AGUARDA PAGAMENTO DO DEBITO
@@ -200,6 +262,10 @@
 		bcf STATUS, C
 		bcf STATUS, Z
 		
+		
+		MOVLW   'W'
+		CALL escreve_dado_lcd
+		
 		;Habilita leitura nos pinos necessarios da porta d
 		BANCO1
 		    movlw b'00000011'
@@ -212,8 +278,6 @@
 
 		    movlw 2
 		    subwf VALOR_DEBITO, 1
-
-		    call RESETA_ALERTAS
 		    
 		    goto AP_FORA_NOTA
 		
@@ -225,14 +289,10 @@
 
 		    movlw 5
 		    subwf VALOR_DEBITO, 1
-
-		    call RESETA_ALERTAS
 		    
 		    goto AP_FORA_NOTA
 		
 		AP_PULA_NOTA_5
-		
-		AP_FORA_NOTA
 		
 		; Retorna porta D para o estado padrao
 		BANCO1
@@ -240,6 +300,31 @@
 		    MOVWF TRISD
 		BANCO0
 		
+		; Usuario não interagiu com o sistema
+		call ALERTAS_STEP		
+		
+		; DEBUG
+		MOVLW   'X'
+		CALL escreve_dado_lcd
+		goto AP_LOOP
+		
+		; Usuario interagiu com o sistema
+		AP_FORA_NOTA		
+	
+		; Retorna porta D para o estado padrao
+		BANCO1
+		    movlw 0
+		    MOVWF TRISD
+		BANCO0
+		
+		call RESETA_ALERTAS
+		
+		MOVLW   'Y'
+		CALL escreve_dado_lcd
+		
+		
+		    MOVLW   'Q'
+		CALL escreve_dado_lcd
 		; ORDEM DAS INSTRUÇÕES É IMPORTANTE
 		; NUMERO NEGATIVO seta tanto o C como o Z
 		
@@ -248,10 +333,15 @@
 		btfsc STATUS,C
 		goto AP_TROCO
 		
+		MOVLW   'T'
+		CALL escreve_dado_lcd
+		
 		; Caso resultado da subtração seja 0, retorna normalmente
 		btfsc STATUS,Z
 		return
 		
+		MOVLW   'R'
+		CALL escreve_dado_lcd
 
 	    
 	    goto AP_LOOP
