@@ -22,6 +22,7 @@
     VALOR_DEBITO    
     TEMPO_LUZ_ALERTA
     TEMPO_SOM_ALERTA
+    PERIODO_LUZ
     ENDC
 
 
@@ -75,7 +76,7 @@
 	
 	; PEGA VALOR DEVIDO E COLOCA NA VARIAVEL "VALOR_DEBITO"
 	CALL PEGA_VALOR_DEBITO
-	;movlw .0
+	;movlw .2
 	;movwf VALOR_DEBITO
 	
 	; AGUARDA PELO PAGAMENTO DO DEBITO
@@ -92,10 +93,6 @@
 	aguarda_passagem_carro
 	    movlw 2
 	    call espera_w_x_500ms
-	    
-	    ; DEBUG
-	    MOVLW   'Z'
-	    CALL escreve_dado_lcd
 	    
 	    call le_sinal_analogico
 	    ; fica em loop ate valor voltar para 0
@@ -185,11 +182,13 @@
     return
     
     RESETA_ALERTAS
+	movlw 1
+	movwf PERIODO_LUZ
 	movlw .30
 	movwf TEMPO_LUZ_ALERTA
 	movlw .20
 	movwf TEMPO_SOM_ALERTA
-	bcf PORTB, RB0	
+	bcf PORTB, RB0		
 	; ??? aonde esta ligado o som de alerta ???
 	bcf PORTB, RB1
     return
@@ -206,7 +205,16 @@
 	DECF TEMPO_LUZ_ALERTA ; Senão decrementa variavel retorna (som só liga 20s apos luz ligar)
 	return
 
-	TOGGLE_LUZ_ALERTA
+	TOGGLE_LUZ_ALERTA	 
+	    ; Controle periodo de 2s
+	    DECFSZ PERIODO_LUZ, 1
+	    goto PULA_LUZ_ALERTA
+	    
+	    ; Reseta periodo da luz
+	    movlw 2
+	    movwf PERIODO_LUZ
+	    
+	    	    
 	    btfsc PORTB, RB0
 	    goto DESLIGA_LUZ_ALERTA ; Caso luz esteja liga, pula para desligar luz
 	    
@@ -251,10 +259,6 @@
 	    CALL RESETA_ALERTAS
 	    AP_LOOP
 		
-		; 1s entre as operações
-		movlw 2
-		call espera_w_x_500ms
-		
 		; AQUI PRECISA ENVIAR MENSAGEM
 		
 		
@@ -262,15 +266,19 @@
 		bcf STATUS, C
 		bcf STATUS, Z
 		
-		
-		MOVLW   'W'
-		CALL escreve_dado_lcd
-		
 		;Habilita leitura nos pinos necessarios da porta d
 		BANCO1
 		    movlw b'00000011'
 		    MOVWF TRISD
 		BANCO0
+		
+		; Limpa valor da porta D (pode conter sujeira pois é compartilhado com display LCD)
+		clrf PORTD
+		
+		
+		; 1s entre as operações
+		movlw 2
+		call espera_w_x_500ms
 		
 		; Checa input de nota de R$ 2
 		btfss PORTD, RD0
@@ -303,10 +311,7 @@
 		; Usuario não interagiu com o sistema
 		call ALERTAS_STEP		
 		
-		; DEBUG
-		MOVLW   'X'
-		CALL escreve_dado_lcd
-		goto AP_LOOP
+		goto AP_LOOP				
 		
 		; Usuario interagiu com o sistema
 		AP_FORA_NOTA		
@@ -319,29 +324,14 @@
 		
 		call RESETA_ALERTAS
 		
-		MOVLW   'Y'
-		CALL escreve_dado_lcd
-		
-		
-		    MOVLW   'Q'
-		CALL escreve_dado_lcd
-		; ORDEM DAS INSTRUÇÕES É IMPORTANTE
-		; NUMERO NEGATIVO seta tanto o C como o Z
-		
 		; Caso resultado o resultado de negativo, precisamos dar
 		; troco para o motorista
-		btfsc STATUS,C
+		btfss STATUS,C
 		goto AP_TROCO
-		
-		MOVLW   'T'
-		CALL escreve_dado_lcd
 		
 		; Caso resultado da subtração seja 0, retorna normalmente
 		btfsc STATUS,Z
 		return
-		
-		MOVLW   'R'
-		CALL escreve_dado_lcd
 
 	    
 	    goto AP_LOOP
