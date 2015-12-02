@@ -64,27 +64,7 @@
     
 	call REINICIA
 	
-	MOVLW   'A'
-	CALL escreve_dado_lcd  
-	MOVLW   'G'
-	CALL escreve_dado_lcd  
-	MOVLW   'U'
-	CALL escreve_dado_lcd  
-	MOVLW   'A'
-	CALL escreve_dado_lcd 
-	MOVLW   'R'
-	CALL escreve_dado_lcd 
-	MOVLW   'D'
-	CALL escreve_dado_lcd  
-	MOVLW   'A'
-	CALL escreve_dado_lcd 
-	MOVLW   'N'
-	CALL escreve_dado_lcd  
-	MOVLW   'D'
-	CALL escreve_dado_lcd  
-	MOVLW   'O'
-	CALL escreve_dado_lcd  
-	
+	call msg_aguardando	
 
 	; AGUARDA ATÉ VEICULO ATIVAR O PRIMEIRO SENSOR E SALVA VALOR DA PORTA NO ACUMULADOR
 	CALL ESPERA_POR_VEICULO
@@ -115,32 +95,7 @@
 	bsf PORTE, RE2
 	; Fim
 	
-	    MOVLW   'A'
-	    CALL escreve_dado_lcd  
-	    MOVLW   'G'
-	    CALL escreve_dado_lcd  
-	    MOVLW   '.'
-	    CALL escreve_dado_lcd  
-	    MOVLW   ' '
-	    CALL escreve_dado_lcd 
-	    MOVLW   'P'
-	    CALL escreve_dado_lcd 
-	    MOVLW   'A'
-	    CALL escreve_dado_lcd  
-	    MOVLW   'S'
-	    CALL escreve_dado_lcd 
-	    MOVLW   'S'
-	    CALL escreve_dado_lcd  
-	    MOVLW   'A'
-	    CALL escreve_dado_lcd  
-	    MOVLW   'G'
-	    CALL escreve_dado_lcd  
-	    MOVLW   'E'
-	    CALL escreve_dado_lcd  
-	    MOVLW   'M'
-	    CALL escreve_dado_lcd  
-	    
-	    
+	call msg_ag_passagem
 	    
 	aguarda_passagem_carro
 	    movlw 2
@@ -172,6 +127,7 @@
     
     REINICIA
 	call RESETA_ALERTAS
+	call limpa_lcd
     return
 
     ESPERA_POR_VEICULO
@@ -195,20 +151,8 @@
 	    movlw .10
 	    movwf VALOR_DEBITO
 	    ; ver esquema das mensagens
-	    MOVLW   '4'
-	    CALL escreve_dado_lcd  
-	    MOVLW   ' '
-	    CALL escreve_dado_lcd  
-	    MOVLW   'E'
-	    CALL escreve_dado_lcd  
-	    MOVLW   'I'
-	    CALL escreve_dado_lcd  
-	    MOVLW   'X'
-	    CALL escreve_dado_lcd  
-	    MOVLW   'O'
-	    CALL escreve_dado_lcd  
-	    MOVLW   'S'
-	    CALL escreve_dado_lcd  
+	    call msg_4_eixos
+	    
 	    goto PULA_FIM_VALOR_DEBITO
 	PULA_VALOR_4_EIXOS
 	
@@ -218,20 +162,8 @@
 	    movlw 7
 	    movwf VALOR_DEBITO
 	    ; ver esquema das mensagens
-	    MOVLW   '3'
-	    CALL escreve_dado_lcd  
-	    MOVLW   ' '
-	    CALL escreve_dado_lcd  
-	    MOVLW   'E'
-	    CALL escreve_dado_lcd  
-	    MOVLW   'I'
-	    CALL escreve_dado_lcd  
-	    MOVLW   'X'
-	    CALL escreve_dado_lcd  
-	    MOVLW   'O'
-	    CALL escreve_dado_lcd  
-	    MOVLW   'S'
-	    CALL escreve_dado_lcd 
+	    call msg_3_eixos
+	    
 	    goto PULA_FIM_VALOR_DEBITO
 	PULA_VALOR_3_EIXOS
 	
@@ -241,30 +173,16 @@
 	    movlw 5
 	    movwf VALOR_DEBITO
 	    ; ver esquema das mensagens
-	    MOVLW   'C'
-	    CALL escreve_dado_lcd
-	    MOVLW   'A'
-	    CALL escreve_dado_lcd
-	    MOVLW   'R'
-	    CALL escreve_dado_lcd
-	    MOVLW   'R'
-	    CALL escreve_dado_lcd
-	    MOVLW   'O'
-	    CALL escreve_dado_lcd
+	    
+	    call msg_carro
+	    
 	    goto PULA_FIM_VALOR_DEBITO
 	PULA_VALOR_CARRO
 	
 	    movlw 0
 	    movwf VALOR_DEBITO
 	    ; ver esquema das mensagens
-	    MOVLW   'M'
-	    CALL escreve_dado_lcd
-	    MOVLW   'O'
-	    CALL escreve_dado_lcd
-	    MOVLW   'T'
-	    CALL escreve_dado_lcd
-	    MOVLW   'O'
-	    CALL escreve_dado_lcd
+	    call msg_moto	    
 		
 	PULA_FIM_VALOR_DEBITO
 	;CALL LCD_LIMPA_TELA
@@ -349,49 +267,33 @@
 	    CALL RESETA_ALERTAS
 	    AP_LOOP
 		
-		; AQUI PRECISA ENVIAR MENSAGEM
+		; AQUI PRECISA ENVIAR MENSAGEM		
 		call lcd_segunda_linha
-		MOVLW   'D'
-		CALL escreve_dado_lcd
-		MOVLW   'E'
-		CALL escreve_dado_lcd
-		MOVLW   'B'
-		CALL escreve_dado_lcd
-		MOVLW   'I'
-		CALL escreve_dado_lcd
-		MOVLW   'T'
-		CALL escreve_dado_lcd
-		MOVLW   'O'
-		CALL escreve_dado_lcd
-		MOVLW   ' '
-		CALL escreve_dado_lcd
+		call msg_debito
+		call lcd_envia_valor_debito
 
-		movfw VALOR_DEBITO
-		addlw .48
-		CALL escreve_dado_lcd
-		
-		
 		; Limpa flags
 		bcf STATUS, C
 		bcf STATUS, Z
+		
+				
+		; Limpa valor da porta D (pode conter sujeira pois é compartilhado com display LCD)
+		clrf PORTD
 		
 		;Habilita leitura nos pinos necessarios da porta d
 		BANCO1
 		    movlw b'00000011'
 		    MOVWF TRISD
 		BANCO0
-		
-		; Limpa valor da porta D (pode conter sujeira pois é compartilhado com display LCD)
-		clrf PORTD
-		
+
 		
 		; 1s entre as operações
 		movlw 2
 		call espera_w_x_500ms
 		
 		; Checa input de nota de R$ 2
-		;btfss PORTD, RD0
-		btfsc PORTB, RB2
+		;btfsc PORTB, RB2
+		btfsc PORTD, RD0		
 		goto AP_PULA_NOTA_2
 
 		    movlw 2
@@ -402,8 +304,8 @@
 		AP_PULA_NOTA_2
 		
 		; Checa input de nota de R$ 5
-		;btfss PORTD, RD1
-		btfsc PORTB, RB3
+		;btfsc PORTB, RB3
+		btfsc PORTD, RD1		
 		goto AP_PULA_NOTA_5
 
 		    movlw 5
@@ -464,22 +366,8 @@
 	    
 		; AQUI PRECISA ENVIAR MENSAGEM
 		call lcd_segunda_linha
-		MOVLW   'T'
-		CALL escreve_dado_lcd
-		MOVLW   'R'
-		CALL escreve_dado_lcd
-		MOVLW   'O'
-		CALL escreve_dado_lcd
-		MOVLW   'C'
-		CALL escreve_dado_lcd		
-		MOVLW   'O'
-		CALL escreve_dado_lcd
-		MOVLW   ' '
-		CALL escreve_dado_lcd
-
-		movfw VALOR_DEBITO
-		addlw .48
-		CALL escreve_dado_lcd
+		call msg_troco		
+		call lcd_envia_valor_debito
 	    
 	    ; REPOEM MOEDA
 		bsf PORTC, RC3	   
@@ -543,7 +431,7 @@ le_sinal_analogico
     
  
  
- 
+;------------------------------------------------------------------------------- 
 espera_w_x_500ms    
     movwf contador_segundo
 
@@ -551,7 +439,7 @@ espera_w_x_500ms
     movwf TMR1L ; 2^16 - 62500
     movlw 0DCh
     movwf TMR1H
-
+;-------------------------------------------------------------------------------
 aguarda_estouro
        btfss PIR1, TMR1IF ; Espera timer0 estourar
        goto aguarda_estouro
@@ -563,11 +451,7 @@ aguarda_estouro
        decfsz contador_segundo ; Aguarda 20 ocorrencias
        goto aguarda_estouro
  return
-    
- 
- 
- 
- 
+;------------------------------------------------------------------------------- 
 escreve_dado_lcd
     BSF     PORTE, RE0          ;Define dado no LCD (RS=1)
     MOVWF   PORTD
@@ -575,33 +459,23 @@ escreve_dado_lcd
     BCF     PORTE, RE1          ;Destativa ENABLE do LCD
     CALL    atrasa_lcd
     RETURN
-
-    
-    
-    
+;-------------------------------------------------------------------------------    
 escreve_comando_lcd
     BCF     PORTE, RE0          ;Define dado no LCD (RS=0)
     MOVWF   PORTD
     BSF     PORTE, RE1          ;Ativa ENABLE do LCD
     BCF     PORTE, RE1          ;Destativa ENABLE do LCD
     CALL    atrasa_lcd
-    RETURN
-
-    
-    
-    
+    RETURN 
+;-------------------------------------------------------------------------------    
 atrasa_lcd
     MOVLW 26                     ; 8 clocks ( pipe-line nova)
     MOVWF contador               ; 4 clocks
 ret_atrasa_lcd
     DECFSZ contador              ; 8 clocks (pipe-line nova)
     GOTO ret_atrasa_lcd          ; 4 clocks
-    RETURN
-
-
-    
-    
-    
+    RETURN  
+;-------------------------------------------------------------------------------    
 atrasa_limpa_lcd
     MOVLW 40
     MOVWF contador2
@@ -609,27 +483,26 @@ ret_atrasa_limpa_lcd
     CALL atrasa_lcd
     DECFSZ contador2
     GOTO ret_atrasa_limpa_lcd
-    RETURN
-    
-    
+    RETURN    
+;-------------------------------------------------------------------------------    
 limpa_lcd
     MOVLW   01h
     CALL escreve_comando_lcd
     CALL atrasa_limpa_lcd
     return
-
+;-------------------------------------------------------------------------------
 lcd_primeira_linha
     MOVLW 80h
     CALL escreve_comando_lcd
     CALL atrasa_lcd
     return
-    
+;-------------------------------------------------------------------------------    
 lcd_segunda_linha
     MOVLW 0C0h
     CALL escreve_comando_lcd
     CALL atrasa_lcd
     return
-    
+;-------------------------------------------------------------------------------
 inicia_lcd
     MOVLW   38h
     CALL escreve_comando_lcd
@@ -651,6 +524,168 @@ inicia_lcd
     CALL atrasa_limpa_lcd
 
     RETURN
+;-------------------------------------------------------------------------------
+lcd_envia_valor_debito
+    movfw VALOR_DEBITO
+    movwf tmp_var
+    movlw .10
+    subwf tmp_var, 1
+    btfsc STATUS, C
+    goto levd_imprime_10
+    
+    movfw VALOR_DEBITO
+    addlw .48
+    CALL escreve_dado_lcd
+    MOVLW   ' '
+    CALL escreve_dado_lcd  
+    return
+    
+    levd_imprime_10
+	MOVLW   '1'
+	CALL escreve_dado_lcd  
+	MOVLW   '0'
+	CALL escreve_dado_lcd  
+return
+;-------------------------------------------------------------------------------   
+    msg_aguardando
+	MOVLW   'A'
+	CALL escreve_dado_lcd  
+	MOVLW   'G'
+	CALL escreve_dado_lcd  
+	MOVLW   'U'
+	CALL escreve_dado_lcd  
+	MOVLW   'A'
+	CALL escreve_dado_lcd 
+	MOVLW   'R'
+	CALL escreve_dado_lcd 
+	MOVLW   'D'
+	CALL escreve_dado_lcd  
+	MOVLW   'A'
+	CALL escreve_dado_lcd 
+	MOVLW   'N'
+	CALL escreve_dado_lcd  
+	MOVLW   'D'
+	CALL escreve_dado_lcd  
+	MOVLW   'O'
+	CALL escreve_dado_lcd  
+    return
+;-------------------------------------------------------------------------------    
+    msg_ag_passagem
+	MOVLW   'A'
+	CALL escreve_dado_lcd  
+	MOVLW   'G'
+	CALL escreve_dado_lcd  
+	MOVLW   '.'
+	CALL escreve_dado_lcd  
+	MOVLW   ' '
+	CALL escreve_dado_lcd 
+	MOVLW   'P'
+	CALL escreve_dado_lcd 
+	MOVLW   'A'
+	CALL escreve_dado_lcd  
+	MOVLW   'S'
+	CALL escreve_dado_lcd 
+	MOVLW   'S'
+	CALL escreve_dado_lcd  
+	MOVLW   'A'
+	CALL escreve_dado_lcd  
+	MOVLW   'G'
+	CALL escreve_dado_lcd  
+	MOVLW   'E'
+	CALL escreve_dado_lcd  
+	MOVLW   'M'
+	CALL escreve_dado_lcd  
+    return
+;-------------------------------------------------------------------------------    
+    msg_4_eixos
+	MOVLW   '4'
+	CALL escreve_dado_lcd  
+	MOVLW   ' '
+	CALL escreve_dado_lcd  
+	MOVLW   'E'
+	CALL escreve_dado_lcd  
+	MOVLW   'I'
+	CALL escreve_dado_lcd  
+	MOVLW   'X'
+	CALL escreve_dado_lcd  
+	MOVLW   'O'
+	CALL escreve_dado_lcd  
+	MOVLW   'S'
+	CALL escreve_dado_lcd 
+    return
+;-------------------------------------------------------------------------------    
+    msg_3_eixos
+	MOVLW   '3'
+	CALL escreve_dado_lcd  
+	MOVLW   ' '
+	CALL escreve_dado_lcd  
+	MOVLW   'E'
+	CALL escreve_dado_lcd  
+	MOVLW   'I'
+	CALL escreve_dado_lcd  
+	MOVLW   'X'
+	CALL escreve_dado_lcd  
+	MOVLW   'O'
+	CALL escreve_dado_lcd  
+	MOVLW   'S'
+	CALL escreve_dado_lcd 
+    return
+;-------------------------------------------------------------------------------    
+    msg_carro
+	MOVLW   'C'
+	CALL escreve_dado_lcd
+	MOVLW   'A'
+	CALL escreve_dado_lcd
+	MOVLW   'R'
+	CALL escreve_dado_lcd
+	MOVLW   'R'
+	CALL escreve_dado_lcd
+	MOVLW   'O'
+	CALL escreve_dado_lcd
+    return
+;-------------------------------------------------------------------------------   
+    msg_moto
+	MOVLW   'M'
+	CALL escreve_dado_lcd
+	MOVLW   'O'
+	CALL escreve_dado_lcd
+	MOVLW   'T'
+	CALL escreve_dado_lcd
+	MOVLW   'O'
+	CALL escreve_dado_lcd
+    return 
+;-------------------------------------------------------------------------------    
+    msg_debito
+	MOVLW   'D'
+	CALL escreve_dado_lcd
+	MOVLW   'E'
+	CALL escreve_dado_lcd
+	MOVLW   'B'
+	CALL escreve_dado_lcd
+	MOVLW   'I'
+	CALL escreve_dado_lcd
+	MOVLW   'T'
+	CALL escreve_dado_lcd
+	MOVLW   'O'
+	CALL escreve_dado_lcd
+	MOVLW   ' '
+	CALL escreve_dado_lcd
+    return
+;-------------------------------------------------------------------------------    
+    msg_troco
+	MOVLW   'T'
+	CALL escreve_dado_lcd
+	MOVLW   'R'
+	CALL escreve_dado_lcd
+	MOVLW   'O'
+	CALL escreve_dado_lcd
+	MOVLW   'C'
+	CALL escreve_dado_lcd		
+	MOVLW   'O'
+	CALL escreve_dado_lcd
+	MOVLW   ' '
+	CALL escreve_dado_lcd
+    return
     
  END
     
